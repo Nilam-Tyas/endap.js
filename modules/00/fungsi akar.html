@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en-us" dir="ltr">
+<head>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<!-- code begins -->
+
+<script src="/libs/chartjs/4.5.1/chart.umd.min.js" defer></script>
+<script type="importmap">
+{
+  "imports": {
+    "endap": "/libs/endap/0.0.3/endap.min.js"
+  }
+}
+</script>
+
+<div id="cnt1"></div>
+
+<script type="module">
+import { Console as CLI } from "endap";
+
+const consoles = CLI.create("400px");
+const cnt = document.getElementById("cnt1");
+cnt.append(consoles.el);
+
+function f(x) {
+  let c0 = 21.3;
+  let c1 = -10.3;
+  let c2 = 1;
+  return c0 + c1 * x + c2 * x * x;
+}
+
+function solveBisection(a, b, tol = 1e-6, maxIter = 100) {
+  let c = a;
+  let iter = 0;
+
+  consoles.log("Iter\t a\t\t b\t\t c (Root)\t f(c)");
+  consoles.log("---------------------------------------------------------------");
+
+  while ((b - a) / 2 > tol && iter < maxIter) {
+    iter++;
+    c = (a + b) / 2;
+    let fc = f(c);
+
+    consoles.log(`${iter}\t ${a.toFixed(5)}\t ${b.toFixed(5)}\t ${c.toFixed(6)}\t ${fc.toFixed(6)}`);
+
+    if (Math.abs(fc) < tol) break;
+
+    if (f(a) * fc < 0) {
+      b = c;
+    } else {
+      a = c;
+    }
+  }
+
+  return c;
+}
+
+let xmin = 0;
+let xmax = 10;
+let dx = 0.2;
+let n = (xmax - xmin) / dx;
+
+let x1 = xmin;
+let y1 = f(x1);
+let s1 = Math.sign(y1);
+
+for (let i = 1; i <= n; i++) {
+  let x2 = xmin + i * dx;
+  let y2 = f(x2);
+  let s2 = Math.sign(y2);
+
+  if (s1 * s2 < 0) {
+    consoles.log(`Interval found at [${x1.toFixed(2)}, ${x2.toFixed(2)}]`);
+    consoles.log("Starting Bisection iterations...");
+    consoles.log("");
+
+    let exactRoot = solveBisection(x1, x2);
+
+    consoles.log("");
+    consoles.log(`--> Exact x value = ${exactRoot.toFixed(6)}`);
+    consoles.log(`--> Value f(x)    = ${f(exactRoot).toFixed(6)}`);
+    break; // Stops after finding the first root
+  } else {
+    s1 = s2;
+    x1 = x2;
+    y1 = y2;
+  }
+}
+</script>
+
+<!-- code ends -->
+</body>
+</html>

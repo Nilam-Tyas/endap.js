@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-us" dir="ltr">
+<head>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+<!-- code begins -->
+
+<script src="/libs/chartjs/4.5.1/chart.umd.min.js" defer></script>
+<script type="importmap">
+{
+  "imports": {
+    "endap": "/libs/endap/0.0.3/endap.min.js"
+  }
+}
+</script>
+
+<!-- Mengubah/Menambah wadah div agar cocok dengan skrip -->
+<div id="cnt1"></div>
+<div id="cnt3"></div>
+
+<script type="module">
+import { Console as CLI } from "endap";
+import { RandNum as RNU } from "endap";
+
+// === BAGIAN 1: PENGURUTAN ARRAY ===
+const consoles = CLI.create("40px");
+const cnt = document.getElementById("cnt1");
+cnt.append(consoles.el);
+
+const min = 10;
+const max = 90;
+const n = 10;
+const x = RNU.randIntN(min, max, n); // Array bernama 'x'
+
+consoles.log("x awal = ", "");
+consoles.log(x);
+
+// Mengubah 'arr' menjadi 'x' agar sesuai dengan nama variabel di atas
+for(let i = 0; i < n; i++) {
+  for(let j = i + 1; j < n; j++) {
+    if (x[i] > x[j]) { 
+      let tmp = x[i];
+      x[i] = x[j];
+      x[j] = tmp;
+    }
+  }
+}
+
+consoles.log("Sorted array: ", "");
+consoles.log(x);
+
+
+// === BAGIAN 2: OPERASI MATEMATIKA ===
+const console2 = CLI.create("300px");
+const cnt3 = document.getElementById("cnt3"); // Wadah cnt3
+cnt3.append(console2.el);
+
+function f(xVal) {
+  let c0 = 21.3;
+  let c1 = -10.3;
+  let c2 = 1;
+  let y = c0 + c1 * xVal + c2 * xVal * xVal;
+  return y;
+}
+
+const xmin = 0;
+const xmax = 10;
+const dx = 1;
+const nSteps = (xmax - xmin) / dx;
+
+// Mengubah 'n' menjadi 'nSteps' agar loop fungsi f(x) berjalan pas
+for(let i = 0; i <= nSteps; i++) {
+  let xCalc = xmin + i * dx;
+  let yCalc = f(xCalc);
+  
+  console2.log(xCalc.toFixed(2), "\t");
+  console2.log(yCalc.toFixed(2));
+}
+</script>
+
+<!-- code ends -->
+</body>
+</html>
